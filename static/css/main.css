@@ -2952,9 +2952,9 @@ div.container {
     }
 }
 
-@media (max-width:900px) and (min-width: 321px){
+@media (min-width: 321px) and (max-width:900px) {
     .s-quotes{
-        height: 100%;
+        height: 750px;
     }
 }
 

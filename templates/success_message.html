@@ -1,0 +1,36 @@
+{% extends "base.html" %} {% load staticfiles %}
+{% block content %}
+
+<div class="page-header page-header--single page-hero" style="background-image:url('/static/img/register.jpg'); background-position: center, center;">
+    <div class="row page-header__content narrow">
+        <article class="col-full">
+<h1 class="page-header__title">
+                        <a href="#0" title="">
+                            Your message has been sent!
+                        </a>
+                    </h1>
+                    
+</article>
+            </div>
+</div>
+
+
+    
+<section class="blog-content-wrap">
+    <div class="row blog-content">
+        <div class="coll-full blog-content__main">
+ <p style="margin-bottom: 110px; margin-top: 80px; font-size: 2.5rem;">Thank you kindly for your message! <br>
+ I'll get back to you with an answer as soon as possible.</p>
+
+ <p><a href="{% url 'posts:home' %}">Go back to Home page</a></p>
+</div>
+    </div>
+</section>
+
+</div>
+
+
+
+ {% endblock content %}
+
+

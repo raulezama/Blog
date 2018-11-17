@@ -1,0 +1,342 @@
+{% extends "base.html" %} {% load staticfiles %}
+{% block content %}
+
+<header class="s-header">
+
+        <!-- <div class="header-logo">
+            <a class="site-logo" href="index.html"><img src="{% static 'images/logo.png' %}" alt="Homepage">Hello</a>
+        </div> -->
+
+        <nav class="header-nav-wrap">
+            <ul class="header-nav">
+           
+                {% include "messages_display.html" %}
+                <li class="current"><a class="smoothscroll"  href="#home" title="home">Home</a></li>
+                <li><a class="smoothscroll"  href="#blog" title="blog">Blog</a></li>
+                <li><a class="smoothscroll"  href="#about" title="about">About</a></li>
+                <li><a class="smoothscroll"  href="#contact" title="contact">Contact</a></li>
+                {% if not request.user.is_authenticated %}
+                {% comment "The register option will not be available" %}
+                    <li><a href="{% url 'register' %}" title= "register">Register</a></li>
+                {% endcomment %}
+                <li><a href="{% url 'login' %}"title= "login">Login</a></li>
+                {% else %}
+                <li><a href="#">Welcome {{ user }}</a></li>
+                <li><a href="{% url 'logout' %}" title= "logout">Logout</a></li>
+                {% endif %}  
+            </ul>
+        </nav>
+
+        <a class="header-menu-toggle" href="#0"><span>Menu</span></a>
+
+    </header> <!-- end s-header -->
+        <!-- home
+   ================================================== -->
+   <section id="home" class="s-home page-hero target-section" data-parallax="scroll" data-image-src="{% static 'img/starss.jpg' %}" data-natural-width=3000 data-natural-height=2000 data-position-y=center>
+
+        <div class="overlay"></div>
+        <div class="shadow-overlay"></div>
+
+        <div class="home-content">
+
+            <div class="row home-content__main">
+
+                <h3>We Are All Stardust</h3>
+
+                <h1>
+                    Welcome to my personal blog, where I share what I'm learning about Astrophysics, Astronomy & Cosmology. <br>
+                    
+                </h1>
+
+               <!-- <div class="home-content__buttons">
+                    <a href="#blog" class="smoothscroll btn btn--stroke">
+                        Latests Posts
+                    </a>
+                    <a href="#about" class="smoothscroll btn btn--stroke">
+                        More About Me
+                    </a>
+                </div> -->
+
+                <div class="home-content__scroll">
+                    <a href="#blog" class="scroll-link smoothscroll">
+                        <span>Start</span>
+                    </a>
+                </div>
+
+            </div>
+
+        </div> <!-- end home-content -->
+
+    </section> <!-- end s-home -->
+
+
+    <!-- blog
+    ================================================== -->
+    <section id="blog" class="s-blog target-section">
+
+        <div class="row narrow section-intro has-bottom-sep">
+            <div class="col-full">
+                <h1>Latest Articles</h1>
+                <!-- <p class="lead">Here, you will find </p> -->
+            </div>
+        </div>
+
+
+
+
+<div class="row blog-content">
+<div class="col-full">
+<div class="blog-list block-1-2 block-tab-full">
+  <!--<form action="" method="GET">
+            <div class="input-group">
+                <input class="form-control" type="text" name="q" placeholder="Search Post" value="{{ request.GET.q }}">
+                <span class="input-group-btn">
+                    <input class= 'btn btn-default' type="submit" value="Search">
+                </span>  
+            </div>
+        </form>-->
+{% for object in object_list  %}
+     <article class="col-block">         
+        <div class="blog-date"> {{ object.publish }} </div>  
+        <h2 class="h01"><a href="{{ object.get_absolute_url }}" >{{ object.title }}</a></h2> <!-- href='{{ object.get_absolute_url }}' -->
+        <div class="caption post-detail-item">
+        {% if object.draft %}<h3>Draft </h3>{% endif %}  {% if object.publish > today %}<h3>Future Post </h3>{% endif %}
+        {% if object.user.get_full_name %}
+            <p>Author: {{ object.user.get_full_name}}</p>
+            {% else %}
+            <p>Author: {{ object.user }}</p>
+        {% endif %}
+        <!-- content -->
+        {{ object.get_markdown|truncatechars_html:150 }}  <!-- truncates only html code allowing displaying images that are not related directly with the model -->
+        <p><a href="{{ object.get_absolute_url }}" class="btn btn-primary" role="button">View</a> </p>
+      </div>
+        <div class="blog-cat">
+                <a href="{% url 'posts:blog' %}?q={{ object.post_tagone }}">{{ object.post_tagone }}</a><a href="{% url 'posts:blog' %}?q={{ object.post_tagtwo }}">{{ object.post_tagtwo }}</a>
+        </div>
+     </article>
+      {% endfor %}  
+  </div>
+  </div>
+  </div>
+<div class="row narrow section-intro has-bottom-sep">
+<div class="col-full">
+  <h3><a class="checkblog" href="{% url 'posts:blog' %}">Check the full Blog</a> </h3>
+  </div>
+  </div>
+    </section> <!-- end s-blog -->
+
+
+    <!-- about
+    ================================================== -->
+    <section id="about" class="s-about target-section">
+        
+        <div class="row narrow section-intro has-bottom-sep">
+            <div class="col-full text-center">
+                <h3>About</h3><br><br>
+                        <a href="#about" class="photo">
+                          <h1 class="nameabout">Raúl Lezama</h1><br>
+                            <img src="{% static 'img/2nd.jpg' %}" />
+                          
+                        </a>  <br>        
+            </div>
+
+                <p class="lead about">Raised and born in Managua, Nicaragua. Consider this blog as my first step in scientific divulgation. I have always been passionate about Astronomy, Astrophysics, and Cosmology. Now I'm planning on getting a Major in Astrophysics.  I enjoy spending my time on citizen science projects but, like a normal person I have my hobbies which include go out with friends, travel and watch series. 
+                </p>
+            </div>
+            
+
+        <div class="row about-content">
+
+            <div class="col-six tab-full left">
+                <h3>And yes... I'm a web developer.</h3>
+
+                <p>As a web developer, I build user-friendly websites, most of them based on Django, but I'm always eager
+                to learn about new technologies, industry trends and best practices. I tend to code things from scratch, and enjoy bringing ideas to life in the browser. </p>
+
+                <p>
+                Actually, I'm building this blog using Django; it allows me to quickly grasp the project's structure if I want to implement an idea. <br>Besides, NASA uses Django.
+                </p>
+
+                <p>In addition, it keeps me in touch with Python. Python is increasingly used in astronomy, both by institutions developing software for new instruments, telescopes, and missions and by astronomers analyzing their data. Consequently, I've started to give it a try to VysPy, which is a high-performance 2D/3D data visualization python library for interactive astrophysical simulations. I might show you one or two projects that I'm working on, so stay tuned.</p>
+            </div>
+
+            <div class="col-six tab-full right">
+                <h3>Some of my skills</h3>
+
+                <ul class="skill-bars">
+                    <li>
+                    <div class="progress percent80"><span>80%</span></div>
+                    <strong>Python</strong>
+                    </li>
+                    <li>
+                    <div class="progress percent85"><span>85%</span></div>
+                    <strong>Django</strong>
+                    </li>
+                    <li>
+                    <div class="progress percent95"><span>95%</span></div>
+                    <strong>HTML5</strong>
+                    </li>
+                    <li>
+                    <div class="progress percent90"><span>90%</span></div>
+                    <strong>CSS3</strong>
+                    </li>
+                    <li>
+                    <div class="progress percent80"><span>80%</span></div>
+                    <strong>JQuery</strong>
+                    </li>
+                    <li>
+                    <div class="progress percent85"><span>85%</span></div>
+                    <strong>Wordpress</strong>
+                    </li>   
+                    <li>
+                    <div class="progress percent70"><span>70%</span></div>
+                    <strong>JavaScript</strong>
+                    </li>   
+                </ul>
+            </div>
+
+        </div> <!-- end about-content -->
+
+        <div class="row about-content about-content--buttons">
+
+            <div class="col-six tab-full left">
+                <a href="https://www.linkedin.com/in/raúl-lezama/" target="blank" class="btn btn--primary full-width">Go to my LinkedIn</a>
+            </div>
+            <div class="col-six tab-full right">
+                <a  href="#contact" class="btn full-width smoothscroll">Hire Me Now</a>
+            </div>
+
+        </div> <!-- end about-content buttons -->
+
+      <!--   Here goes the timeline-->
+
+    </section> <!-- end about -->
+
+     <!-- quotes
+    ================================================== -->
+    <div class="s-quotes" style= "background-image: url('static/img/quotes.jpg'); ">
+
+        <div class="overlay"></div>
+
+        <div class="row quotes-header">
+            <div class="col-full">
+                <h1 class="h02">Some people said...</h1>
+            </div>
+        </div>
+
+        <div class="row quotes">
+
+            <div class="col-full quotes__slider">
+
+                <div class="quotes__slide">
+                 <img src="{% static 'img/avatars/user-01.jpg' %}" alt="Author image" class="quotes__avatar">
+                    <p>“The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself.” </p>
+                    <div class="quotes__author h06">
+                        Carl Sagan
+                        <span>Science Communicator, Astronomer</span>
+                    </div>
+                </div>
+
+                <div class="quotes__slide">
+                     <img src="{% static 'img/avatars/user-02.jpg' %}" alt="Author image" class="quotes__avatar">
+                    <p>“Remember to look up at the stars and not down at your feet. Try to make sense of what you see and wonder about what makes the universe exist. Be curious. And however difficult life may seem, there is always something you can do and succeed at. 
+It matters that you don't just give up.” </p>
+                    <div class="quotes__author h06">
+                        Stephen Hawking
+                        <span>Theoretical Physicist, Cosmologist</span>
+                    </div>
+                </div>
+
+                <div class="quotes__slide">
+                     <img src="{% static 'img/avatars/user-03.jpg' %}" alt="Author image" class="quotes__avatar">
+                    <p>Early to bed and early to rise makes a man healthy, wealthy, and wise.</p>
+                    <div class="quotes__author h06">
+                        Benjamin Franklin
+                        <span>6th President of Pennsylvania</span>
+                    </div>
+                </div>
+                
+                <div class="quotes__slide">
+                     <img src="{% static 'img/avatars/user-04.jpg' %}" alt="Author image" class="quotes__avatar">
+                    <p>“The world is indeed full of peril, and in it there are many dark places; but still there is much that is fair, and though in all lands love is now mingled with grief, it grows perhaps the greater.” </p>
+                    <div class="quotes__author h06">
+                        J.R.R. Tolkien
+                        <span>Writer, Author of The Lord the Rings Trilogy</span>
+                    </div>
+                </div>
+
+                <div class="quotes__slide">
+                     <img src="{% static 'img/avatars/user-05.jpg' %}" alt="Author image" class="quotes__avatar">
+                    <p>“Equipped with his five senses, man explores the universe around him and calls the adventure Science.” </p>
+                    <div class="quotes__author h06">
+                        Edwin Hubble
+                        <span>Astronomer</span>
+                    </div>
+                </div>
+            </div> <!-- end quotes__slider -->
+
+        </div> <!-- end quotes -->
+
+    </div> <!-- end s-quotes -->
+
+    <!--Contact
+    ================================================== -->
+    <section id="contact" class="s-contact target-section" style= "background-image: url('static/img/starss.jpg');">
+
+        <div class="overlay"></div>
+
+        <div class="row narrow section-intro">
+            <div class="col-full">
+                <h3>Contact</h3>
+                <h1>Let's Talk!</h1>
+                
+                <p class="lead">If you want to contact me, either for work or research, you can send me a message, and I will answer as soon as I can.</p>
+            </div>
+        </div>
+
+        <div class="row contact__main">
+            <div class="col-eight tab-full contact__form">
+                <form method="POST" action="" name="contactForm" id="contactForm" >
+                    {% csrf_token %}
+                    <fieldset>
+                    <div class="form-field">
+                        <input name="name" type="text" id="contactName" placeholder="Name" value="" minlength="2" required="" aria-required="true" class="full-width">
+                    </div>
+                    <div class="form-field">
+                        <input name="email" type="email" id="contactEmail" placeholder="Email" value="" required="" aria-required="true" class="full-width">
+                    </div>
+                    <!-- <div class="form-field">
+                        <input name="subject" type="text" id="contactSubject" placeholder="Subject" value="" class="full-width">
+                    </div> -->
+                    <div class="form-field">
+                        <textarea name="message" id="contactMessage" placeholder="Message" rows="10" cols="50" required="" aria-required="true" class="full-width message-about"></textarea>
+                    </div>
+                    <div class="form-field">
+                        <button id="send-mail" type="submit" value="Post Comment" class="full-width btn--primary">Send Message</button>
+                    </div>
+                    </fieldset>
+                </form>
+
+                <!-- contact-success -->
+              <div class="message-success">
+                    Your message was sent, thank you!<br>
+                </div> 
+                        
+            </div>
+            <div class="col-four tab-full contact__infos">
+                <h4 class="h06">Phone</h4>
+                <p>
+                Mobile: (+505) 7524 0725<br>
+                </p>
+
+                <h4 class="h06">Email</h4>
+                <p>raullezamah@gmail.com<br>lezamaral@yahoo.es
+                </p>
+            </div>
+
+        </div>
+
+    </section> <!-- end s-contact -->
+
+
+        {% endblock content %}

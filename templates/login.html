@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="page-header page-header--single page-hero" style="background-image:url('/static/img/register.jpg'); background-position: center, center;">
+    <div class="row page-header__content narrow">
+                <article class="col-full">
+                    <h1 class="page-header__title">
+                        <a href="#0" title="">
+                            {{ title }}!
+                        </a>
+                    </h1>
+                    {% if title != "Register" %}
+                        <ul class="page-header__meta">
+                        <li class="author">
+                           Currently, the login option is only available for administrators, but you can go ahead and make a comment on an article as a guest or using your social media accounts.
+                        </li>
+                    </ul>
+                    {% else %}
+                        <p></p>
+                    {% endif %}
+                    
+                   
+                </article>
+            </div>
+</div>
+<section class="blog-content-wrap">
+<div class="row blog-content">
+    <div class="coll-full blog-content__main">
+<h1> Please enter your information</h1><br>
+    <form method="POST" action="" enctype="multipart/form-data"> {# enctype is necesary #}
+        {% csrf_token %}
+        {{ form|crispy }}
+    <input type="submit" class="btn btn-default" value="{{ title }}">
+    </form>
+    </div>
+    </div>
+</section>
+
+{% endblock content %}
